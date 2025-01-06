@@ -2,6 +2,7 @@ import Link from "next/link";
 import logoImg from "@/assets/logo.jpg";
 import classes from "./main-header.module.css";
 import Image from "next/image";
+import NavLink from "./nav-link";
 // import MainHeaderBackground from "./main-header-background";
 // import NavLink from "./nav-link";
 
@@ -15,10 +16,10 @@ const MainHeader = () => {
         </Link>
         <ul>
           <li>
-            <Link href="/">Home</Link>
+            <NavLink href="/archive">Archive</NavLink>
           </li>
           <li>
-            <Link href="/news">News</Link>
+            <NavLink href="/news">News</NavLink>
           </li>
         </ul>
       </header>

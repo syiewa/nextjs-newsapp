@@ -1,4 +1,4 @@
-export default function ArchieveLayout({
+export default function ArchiveLayout({
   archive,
   latest,
 }: {
