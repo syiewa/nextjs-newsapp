@@ -1,6 +1,7 @@
 import { DUMMY_NEWS } from "@/dummy-news";
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import ModalImage from "@/components/modal-image";
 
 export default async function InterceptedImagePage({
   params,
@@ -14,13 +15,12 @@ export default async function InterceptedImagePage({
   }
   return (
     <>
-      <div className="modal-backdrop" />
+      <ModalImage />
       <dialog className="modal" open>
         <div className="fullscreen-image">
-          <h1>Intercepted</h1>
           <Image
             src={`/images/news/${newsItem.image}`}
-            alt={newsItem.title}
+            alt="telo"
             height={0}
             width={0}
             sizes="100vw"
