@@ -5,7 +5,7 @@ import Image from 'next/image';
 export default function HomePage() {
   return (
     <div className="home">
-      <Image src={logo.src} alt="A newspaper" className='ml-auto mr-auto' fill/>
+      <Image src={logo.src} alt="A newspaper" className='ml-auto mr-auto' width={200} height={200} />
       <h1>A News Site For The Next Generation</h1>
       <p>
         Next News is here to deliver you all the latest news - concise &
