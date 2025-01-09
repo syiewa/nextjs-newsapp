@@ -1,15 +1,19 @@
-import { DUMMY_NEWS } from "@/dummy-news";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import ModalImage from "@/components/modal-image";
+import ModalImage from "@/components/modal-backdrop";
+import { getNewsItem, News } from "@/lib/news";
 
+interface PageProps {
+  params: Promise<{ slug: string | undefined }>;
+}
 export default async function InterceptedImagePage({
   params,
-}: {
-  params: { slug: string };
-}) {
+}: PageProps) {
   const { slug } = await params;
-  const newsItem = DUMMY_NEWS.find((news) => news.slug === slug);
+  if (!slug) {
+    notFound();
+  }
+  const newsItem = await getNewsItem(slug) as News;
   if (!newsItem) {
     notFound();
   }

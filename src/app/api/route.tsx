@@ -11,6 +11,7 @@ export function GET(request: Request): Response {
 }
 
 export function POST(request: Request): Response {
+  console.log(request);
   return new Response(
     `Hello from the POST method!`,
     {

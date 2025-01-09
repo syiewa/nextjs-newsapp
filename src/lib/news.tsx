@@ -1,4 +1,6 @@
-import { DUMMY_NEWS } from '@/dummy-news';
+import { createClient } from "@/utils/supabase/client";
+
+
 export interface News {
   id: string;
   title: string;
@@ -7,51 +9,70 @@ export interface News {
   image?: string;
   slug: string;
 }
+const supabase = createClient();
 
-export function getAllNews() {
-  return DUMMY_NEWS;
+export async function getAllNews() {
+  const { data: news } = await supabase.from("news").select("*");
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  return news;
 }
 
-export function getLatestNews() {
-  return DUMMY_NEWS.slice(0, 3);
+export async function getNewsItem(slug: string) {
+  const { data: news } = await supabase
+    .from("news")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  return news;
 }
 
-export function getAvailableNewsYears() {
-  return DUMMY_NEWS.reduce<number[]>((years, news) => {
-    const year = new Date(news.date).getFullYear();
-    if (!years.includes(year)) {
-      years.push(year);
+export async function getLatestNews() {
+  const { data: latestNews } = await supabase
+    .from("news")
+    .select("*")
+    .order("date", { ascending: false })
+    .limit(3);
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  return latestNews;
+}
+
+export async function getAvailableNewsYears() {
+  try {
+    const { data, error } = await supabase.rpc("get_distinct_years");
+
+    if (error) {
+      console.error("Error fetching news years:", error);
+      throw error;
     }
+    const years = data.map((row: { year: number }) => row.year);
     return years;
-  }, []).sort((a, b) => b - a);
+  } catch (error) {
+    console.error("Failed to fetch news years:", error);
+    throw error;
+  }
 }
 
-export function getAvailableNewsMonths(year: number): number[] {
-  return DUMMY_NEWS.reduce<number[]>((months, news: News) => {
-    const newsYear = new Date(news.date).getFullYear();
-    if (newsYear === year) {
-      const month = new Date(news.date).getMonth();
-      if (!months.includes(month + 1)) {
-        months.push(month + 1);
-      }
-    }
-    return months;
-  }, []).sort((a, b) => b - a);
-}
-
-
-export function getNewsForYear(year: number): News[] {
-  return DUMMY_NEWS.filter(
-    (news: News) => new Date(news.date).getFullYear() === year
-  );
-}
-
-
-
-export function getNewsForYearAndMonth(year: number, month: number): News[] {
-  return DUMMY_NEWS.filter((news: News) => {
-    const newsYear = new Date(news.date).getFullYear();
-    const newsMonth = new Date(news.date).getMonth() + 1;
-    return newsYear === year && newsMonth === month;
+export async function getAvailableNewsMonths(year: number | string) {
+  const res = await supabase.rpc("get_distinct_month", {
+    target_month: year,
   });
+  const months = res.data.map((row: { month: number }) => row.month);
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  return months;
+}
+
+export async function getNewsForYear(year: number | string) {
+  const {data:news} = await supabase.rpc('get_news_for_year',{target_year: year});
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  return news;
+}
+
+export async function getNewsForYearAndMonth(
+  year: number | string,
+  month: number | string
+) {
+  const {data:news} = await supabase.rpc('get_news_for_year_month',{target_year: year, target_month: month});
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  return news;
 }

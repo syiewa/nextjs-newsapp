@@ -1,3 +1,3 @@
-export default function ModalDefaultPage({params}:Promise<{params: {slug: string}}>) {
+export default function ModalDefaultPage() {
     return null;
 }

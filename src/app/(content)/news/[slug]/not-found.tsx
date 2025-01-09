@@ -4,7 +4,7 @@ export default function NotFoundPage() {
       <h1>
         Not Found!
       </h1>
-      <p>Unfortunately , We cannot found article you're looking for.</p>
+      <p>Unfortunately , We cannot found article you&apos;re looking for.</p>
     </div>
   );
 }
